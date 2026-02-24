@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel War |</title>
+    <style>
+        body { margin: 0; background: #222; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
+        canvas { 
+            border: 2px solid #555; 
+            background: white; 
+            image-rendering: pixelated; /* Piksellerin net görünmesi için şart */
+            cursor: crosshair;
+            margin-top: 20px;
+            max-width: 95vw;
+        }
+        .controls { margin-top: 10px; }
+        #cooldown { font-weight: bold; color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>Pixel War - $512 \times 512$</h1>
+    
+    <div id="auth-section">
+        <p>Lütfen piksel koymak için giriş yapın (Yakında)</p>
+    </div>
+
+    <div class="controls">
+        Renk: <input type="color" id="pixelColor" value="#000000">
+        Kalan Hak: <span id="pixelCount">5</span>
+    </div>
+
+    <canvas id="pixelCanvas" width="512" height="512"></canvas>
+
+    <script>
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('pixelColor');
+        
+        // Boş haritayı beyazla doldur
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, 512, 512);
+
+        // Piksel Koyma Fonksiyonu
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            // Tıklanan yerin koordinatlarını hesapla
+            const x = Math.floor((event.clientX - rect.left) * scaleX);
+            const y = Math.floor((event.clientY - rect.top) * scaleY);
+
+            drawPixel(x, y, colorPicker.value);
+        });
+
+        function drawPixel(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, 1, 1); // 1x1 piksel çiz
+            console.log(`Piksel koyuldu: X:${x}, Y:${y}, Renk:${color}`);
+        }
+    </script>
+</body>
+</html>
